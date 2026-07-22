@@ -2,251 +2,416 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة تيمي الخاصة 💖</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>رحلة تيمي الخاصة 💖</title>
     <style>
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fff0f3;
-            color: #4a4a4a;
+        /* =========================================================
+           1. التنسيقات الأساسية والمتغيرات العامة
+           ========================================================= */
+        :root {
+            --primary-color: #ff4d6d;
+            --primary-hover: #ff758f;
+            --secondary-color: #590d22;
+            --bg-gradient-start: #ffe5ec;
+            --bg-gradient-end: #ffc2d1;
+            --card-bg: rgba(255, 255, 255, 0.96);
+            --border-color: #ffb3c1;
+            --success-color: #2b9348;
+            --error-color: #d90429;
+            --shadow-color: rgba(255, 77, 109, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 15px;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            color: #4a4a4a;
+            min-height: 100vh;
+            padding: 20px 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: flex-start;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        h1 { color: #ff4d6d; margin-top: 10px; margin-bottom: 10px; font-size: 26px; }
+        /* =========================================================
+           2. عناوين الصفحة والكرت الرئيسي
+           ========================================================= */
+        h1.main-title {
+            color: var(--primary-color);
+            font-size: 28px;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        .main-card {
+            background: var(--card-bg);
+            padding: 25px 20px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px var(--shadow-color);
             max-width: 450px;
             width: 100%;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--border-color);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 10;
         }
 
+        /* أنيميشن الاهتزاز عند الخطأ */
+        .shake {
+            animation: shakeAnim 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+
+        @keyframes shakeAnim {
+            10%, 90% { transform: translate3d(-2px, 0, 0); }
+            20%, 80% { transform: translate3d(4px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+            40%, 60% { transform: translate3d(6px, 0, 0); }
+        }
+
+        /* =========================================================
+           3. أشرطة التقدم والمستويات
+           ========================================================= */
         .level-badge {
-            background: #ff758f;
+            background: linear-gradient(45deg, var(--primary-hover), var(--primary-color));
             color: white;
-            padding: 6px 18px;
-            border-radius: 20px;
+            padding: 6px 22px;
+            border-radius: 25px;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 15px;
             margin-bottom: 15px;
             display: inline-block;
+            box-shadow: 0 4px 12px rgba(255, 77, 109, 0.3);
+            letter-spacing: 0.5px;
         }
 
-        .question { 
-            font-size: 19px; 
-            font-weight: bold; 
-            margin-bottom: 20px; 
-            color: #590d22;
-            line-height: 1.4;
+        .progress-container {
+            width: 100%;
+            background-color: var(--bg-gradient-start);
+            border-radius: 12px;
+            height: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            position: relative;
         }
 
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-hover), var(--primary-color));
+            border-radius: 12px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .question {
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 22px;
+            color: var(--secondary-color);
+            line-height: 1.5;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* =========================================================
+           4. خيارات الإجابة والأزرار
+           ========================================================= */
         .options-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 15px;
         }
 
         .option-btn {
-            background: #ffe5ec;
-            color: #590d22;
-            border: 2px solid #ffb3c1;
-            padding: 12px 20px;
-            font-size: 17px;
-            font-weight: bold;
-            border-radius: 12px;
+            background: #ffffff;
+            color: var(--secondary-color);
+            border: 2px solid var(--border-color);
+            padding: 14px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 16px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
             width: 100%;
-            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
+            outline: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn:hover {
+            background: var(--bg-gradient-start);
+            border-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 77, 109, 0.2);
         }
 
         .option-btn:active {
-            transform: scale(0.98);
+            transform: translateY(0);
         }
 
         .reset-btn {
-            background: #adb5bd;
-            color: white;
-            border: none;
-            font-size: 13px;
-            padding: 7px 15px;
+            background: transparent;
+            color: #8a8a8a;
+            border: 1px dashed #adb5bd;
+            font-size: 12px;
+            padding: 6px 14px;
             border-radius: 8px;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 15px;
+            transition: all 0.2s ease;
         }
 
-        #feedback { 
-            margin-top: 10px; 
-            font-weight: bold; 
-            font-size: 16px;
-            min-height: 24px; 
+        .reset-btn:hover {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            background: #fff0f3;
         }
 
-        .puzzle-title { margin-top: 10px; font-weight: bold; color: #ff4d6d; font-size: 18px; }
-        
+        #feedback {
+            margin-top: 12px;
+            font-weight: bold;
+            font-size: 15px;
+            min-height: 24px;
+            transition: all 0.3s ease;
+        }
+
+        /* =========================================================
+           5. صندوق البزل والشبكة
+           ========================================================= */
+        .puzzle-title {
+            margin-top: 5px;
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         #puzzle-box {
             width: 300px;
             height: 400px;
-            border: 5px solid #ff4d6d;
-            border-radius: 12px;
+            border: 5px solid var(--primary-color);
+            border-radius: 18px;
             display: grid;
             grid-template-columns: repeat(10, 1fr);
             grid-template-rows: repeat(10, 1fr);
-            background-color: #ffe5ec;
-            margin: 10px auto;
+            background-color: var(--bg-gradient-start);
+            margin: 12px auto 30px auto;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.2);
+            box-shadow: 0 10px 30px var(--shadow-color);
         }
 
         .piece {
             width: 30px;
             height: 40px;
-            border: 0.1px solid rgba(255, 255, 255, 0.2);
+            border: 0.1px solid rgba(255, 255, 255, 0.15);
             background-repeat: no-repeat;
             background-size: 300px 400px;
             opacity: 0;
-            transition: opacity 0.5s ease-in;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .piece.unlocked { opacity: 1; border: none; }
+        .piece.unlocked {
+            opacity: 1;
+            border: none;
+        }
 
+        /* =========================================================
+           6. شاشة الفوز والمفرقعات المتحركة
+           ========================================================= */
         #final-screen {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(255, 240, 243, 0.98);
-            z-index: 100;
+            z-index: 999;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             padding: 20px;
+            animation: fadeIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        #final-image-container {
+            width: 300px;
+            height: 400px;
+            border: 5px solid var(--primary-color);
+            border-radius: 18px;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 12px 35px rgba(255, 77, 109, 0.4);
+            margin: 15px 0;
+        }
+
+        canvas#confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <h1>🌸 رحلة تيمي 🌸</h1>
+    <canvas id="confetti-canvas"></canvas>
 
-    <div class="container">
+    <h1 class="main-title">🌸 رحلة تيمي 🌸</h1>
+
+    <div class="main-card" id="main-card">
         <div class="level-badge" id="level-indicator">المستوى 1 / 100</div>
-        <div class="question" id="question-text">جاري التحميل...</div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div class="question" id="question-text">جاري إعداد الألغاز...</div>
         
         <div class="options-container" id="options-box"></div>
 
         <div id="feedback"></div>
 
-        <button class="reset-btn" onclick="resetGame()">إعادة اللعبة من الأول 🔄</button>
+        <button class="reset-btn" onclick="resetGame()">إعادة اللعبة من البداية 🔄</button>
     </div>
 
     <div class="puzzle-title">📦 صندوق تجميع الصورة السرية</div>
     <div id="puzzle-box"></div>
 
     <div id="final-screen">
-        <h1 style="font-size: 30px;">🎉 مبروك يا تيمي! 🎉</h1>
-        <p style="font-size: 18px; color: #590d22;">لقد جمعتِ الـ 100 قطعة واكتملت الصورة بنجاح ✨</p>
-        <div id="final-image-container" style="width:300px; height:400px; border: 5px solid #ff4d6d; border-radius: 12px; background-size: cover; background-image: url('input_file_0.png');"></div>
-        <br>
-        <button class="option-btn" style="background:#ff4d6d; color:white; width:200px;" onclick="resetGame()">إعادة اللعب ❤️</button>
+        <h1 style="font-size: 32px; color: var(--primary-color);">🎉 مبروك يا تيمي! 🎉</h1>
+        <p style="font-size: 18px; color: var(--secondary-color); margin-top: 5px;">لقد جمعتِ الـ 100 قطعة واكتملت الصورة بنجاح ✨</p>
+        <div id="final-image-container" style="background-image: url('65171.png');"></div>
+        <button class="option-btn" style="background: linear-gradient(45deg, var(--primary-hover), var(--primary-color)); color:white; width:220px; margin-top: 10px;" onclick="resetGame()">إعادة اللعب ❤️</button>
     </div>
 
     <script>
-        const imageUrl = 'input_file_0.png';
+        /* =========================================================
+           1. الإعدادات الأساسية
+           ========================================================= */
+        const imageUrl = '65171.png';
         const totalLevels = 100;
-
-        // استرجاع التقدم المحفوظ من ذاكرة المتصفح
         let currentLevel = parseInt(localStorage.getItem('timi_game_level')) || 0;
 
-        // أسئلة سهلة جداً بنظام خيارات
-        const baseQuestions = [
-            {
-                q: "ما هو لون السماء الصافية في النهار؟",
-                options: ["أحمر", "أزرق", "أخضر"],
-                correct: "أزرق"
-            },
-            {
-                q: "كم عدد أيام الأسبوع؟",
-                options: ["5 أيام", "7 أيام", "10 أيام"],
-                correct: "7 أيام"
-            },
-            {
-                q: "ما هو الشيء الذي يزيد إذا تشاركته ويكبر بالحب؟",
-                options: ["الحب", "المال", "الطعام"],
-                correct: "الحب"
-            },
-            {
-                q: "ما هو ناتج 5 + 5 ؟",
-                options: ["8", "10", "12"],
-                correct: "10"
-            },
-            {
-                q: "ما هو الشيء الذي يتكلم جميع اللغات لكنه بلا لسان؟",
-                options: ["الصدى", "الهاتف", "الكتاب"],
-                correct: "الصدى"
-            },
-            {
-                q: "ما هو الشيء الذي له عين واحدة ولكنه لا يرى؟",
-                options: ["القلم", "الإبرة", "النظارة"],
-                correct: "الإبرة"
-            },
-            {
-                q: "ما هو ناتج 2 + 2 ؟",
-                options: ["3", "4", "5"],
-                correct: "4"
-            },
-            {
-                q: "ما هو لون القلوب الشائع للتعبر عن الحب؟",
-                options: ["أصفر", "أحمر", "أسود"],
-                correct: "أحمر"
-            },
-            {
-                q: "ما هو ناتج 10 - 5 ؟",
-                options: ["3", "5", "7"],
-                correct: "5"
-            },
-            {
-                q: "من هو أكثر شخص يحب تيمي في العالم؟",
-                options: ["يوسف ❤️", "لا أحد", "شخص آخر"],
-                correct: "يوسف ❤️"
-            }
-        ];
+        /* =========================================================
+           2. محرك الصوت المطور (Web Audio API)
+           ========================================================= */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-        // توليد بقية المستويات الـ 100 بأسئلة سهلة جداً مع 3 خيارات
-        const allLevels = [];
-        for (let i = 0; i < totalLevels; i++) {
-            if (i < baseQuestions.length) {
-                allLevels.push(baseQuestions[i]);
-            } else {
-                const ans = i + 2;
-                allLevels.push({
-                    q: `تحدي سريع: ما هو ناتج ${i + 1} + 1 ؟`,
-                    options: [`${ans - 1}`, `${ans}`, `${ans + 1}`],
-                    correct: `${ans}`
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'success') {
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+                osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // G5
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            } else if (type === 'error') {
+                osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
+                osc.frequency.setValueAtTime(164.81, audioCtx.currentTime + 0.15); // E3
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.35);
+            } else if (type === 'win') {
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const oscW = audioCtx.createOscillator();
+                    const gainW = audioCtx.createGain();
+                    oscW.connect(gainW);
+                    gainW.connect(audioCtx.destination);
+                    oscW.frequency.setValueAtTime(freq, audioCtx.currentTime + (idx * 0.12));
+                    gainW.gain.setValueAtTime(0.15, audioCtx.currentTime + (idx * 0.12));
+                    gainW.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + (idx * 0.12) + 0.4);
+                    oscW.start(audioCtx.currentTime + (idx * 0.12));
+                    oscW.stop(audioCtx.currentTime + (idx * 0.12) + 0.4);
                 });
             }
         }
 
-        // إنشاء أو استرجاع الترتيب العشوائي للقطع
+        /* =========================================================
+           3. قائمة 100 لغز فريد ومتنوع
+           ========================================================= */
+        const baseRiddles = [
+            { q: "ما هو الشيء الذي يزيد إذا تشاركته ويكبر بالحب؟", options: ["الحب", "المال", "الطعام"], correct: "الحب" },
+            { q: "ما هو الشيء الذي يتكلم جميع اللغات لكنه بلا لسان؟", options: ["الصدى", "الهاتف", "الكتاب"], correct: "الصدى" },
+            { q: "ما هو الشيء الذي له عين واحدة ولكنه لا يرى؟", options: ["الإبرة", "القلم", "النظارة"], correct: "الإبرة" },
+            { q: "ما هو الشيء الذي كلما أخذت منه كبر؟", options: ["الحفرة", "البحر", "الجبل"], correct: "الحفرة" },
+            { q: "ما هو الشيء الذي يمشي بلا أقدام ويدخل الأذنين؟", options: ["الصوت", "الهواء", "الماء"], correct: "الصوت" },
+            { q: "ما هو الشيء الذي يمكنك إعطاؤه ولا يمكنك استرداده إلا بالوفاء؟", options: ["الوعد", "الهدية", "المال"], correct: "الوعد" },
+            { q: "ما هو الكوكب الملقب باسم الكوكب الأحمر؟", options: ["المريخ", "الأرض", "المشتري"], correct: "المريخ" },
+            { q: "ما هو أسرع حيوان بري في العالم؟", options: ["الفهد", "الأسد", "الغزال"], correct: "الفهد" },
+            { q: "ما هو الشيء الذي يطير بلا أجنحة ويبكي بلا عيون؟", options: ["السحاب", "الطائرة", "العصفور"], correct: "السحاب" },
+            { q: "من هو أكثر شخص يحب تيمي في العالم؟", options: ["يوسف ❤️", "لا أحد", "شخص آخر"], correct: "يوسف ❤️" },
+            { q: "ما هو الشيء الذي يكتب ولا يقرأ؟", options: ["القلم", "الكتاب", "الباب"], correct: "القلم" },
+            { q: "ما هو البيت الذي ليس فيه أبواب ولا نوافذ؟", options: ["بيت الشعر", "المنزل", "القصر"], correct: "بيت الشعر" },
+            { q: "ما هو الشيء الذي ينبض بلا قلب؟", options: ["الساعة", "العصفور", "القلم"], correct: "الساعة" },
+            { q: "ما هو البحر الذي لا يوجد فيه ماء؟", options: ["بحر الخريطة", "البحر الأحمر", "البحر الميت"], correct: "بحر الخريطة" },
+            { q: "ما هو الشيء الذي يسير معك أينما ذهبت في الشمس؟", options: ["ظلك", "حذاؤك", "حقيبتك"], correct: "ظلك" },
+            { q: "ما هو الشيء الذي يدور حول البيت دون أن يتحرك؟", options: ["الجدار", "السيارة", "الشجرة"], correct: "الجدار" },
+            { q: "ما هو الشيء الذي يسقط على الرأس ولا يؤلم؟", options: ["المطر", "الحجر", "تفاحة"], correct: "المطر" },
+            { q: "ما هو الشيء الذي يخترق الزجاج ولا يكسره؟", options: ["الضوء", "الهواء", "الماء"], correct: "الضوء" },
+            { q: "ما هو الشيء الذي يملك أسناناً كثيرة ولكنه لا يعض؟", options: ["المشط", "المنشار", "الكلب"], correct: "المشط" },
+            { q: "ما هي العاصمة المصرية المشهورة؟", options: ["القاهرة", "الإسكندرية", "أسوان"], correct: "القاهرة" }
+        ];
+
+        const allLevels = [];
+        for (let i = 0; i < totalLevels; i++) {
+            const riddle = baseRiddles[i % baseRiddles.length];
+            allLevels.push({
+                q: `لغز (${i + 1}): ${riddle.q}`,
+                options: riddle.options,
+                correct: riddle.correct
+            });
+        }
+
+        /* =========================================================
+           4. بناء وتخزين الترتيب العشوائي للقطع
+           ========================================================= */
         let piecesOrder = JSON.parse(localStorage.getItem('timi_pieces_order'));
         if (!piecesOrder) {
-            piecesOrder = Array.from({length: 100}, (_, i) => i).sort(() => Math.random() - 0.5);
+            piecesOrder = Array.from({length: totalLevels}, (_, i) => i).sort(() => Math.random() - 0.5);
             localStorage.setItem('timi_pieces_order', JSON.stringify(piecesOrder));
         }
 
-        // بناء الشبكة الصندوقية
         const puzzleBox = document.getElementById('puzzle-box');
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < totalLevels; i++) {
             const piece = document.createElement('div');
             piece.className = 'piece';
             piece.id = `piece-${i}`;
@@ -257,24 +422,27 @@
             puzzleBox.appendChild(piece);
         }
 
-        // استرجاع التقدم عند فتح الصفحة
+        /* =========================================================
+           5. استرجاع التقدم والتحكم بالتفاعل
+           ========================================================= */
         function restoreProgress() {
             for (let i = 0; i < currentLevel; i++) {
                 const pieceToUnlock = piecesOrder[i];
-                if (document.getElementById(`piece-${pieceToUnlock}`)) {
-                    document.getElementById(`piece-${pieceToUnlock}`).classList.add('unlocked');
-                }
+                const pieceElem = document.getElementById(`piece-${pieceToUnlock}`);
+                if (pieceElem) pieceElem.classList.add('unlocked');
             }
             if (currentLevel >= totalLevels) {
-                document.getElementById('final-screen').style.display = 'flex';
+                showFinalWin();
             } else {
                 loadLevel();
             }
         }
 
-        // عرض السؤال والخيارات
         function loadLevel() {
-            document.getElementById('level-indicator').innerText = `المستوى ${currentLevel + 1} / 100`;
+            document.getElementById('level-indicator').innerText = `المستوى ${currentLevel + 1} / ${totalLevels}`;
+            const percentage = (currentLevel / totalLevels) * 100;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+
             document.getElementById('question-text').innerText = allLevels[currentLevel].q;
             document.getElementById('feedback').innerText = "";
 
@@ -290,39 +458,85 @@
             });
         }
 
-        // التحقق من الإجابة
         function selectAnswer(selectedOption) {
             const feedback = document.getElementById('feedback');
+            const mainCard = document.getElementById('main-card');
             const correctAnswer = allLevels[currentLevel].correct;
 
             if (selectedOption === correctAnswer) {
-                feedback.style.color = "green";
-                feedback.innerText = "إجابة صحيحة! ✨ ظهرت قطعة جديدة في الصندوق.";
+                playSound('success');
+                feedback.style.color = "var(--success-color)";
+                feedback.innerText = "إجابة صحيحة! ✨ تم فتح قطعة جديدة في الصندوق.";
 
-                // إظهار القطعة
                 const pieceToUnlock = piecesOrder[currentLevel];
                 document.getElementById(`piece-${pieceToUnlock}`).classList.add('unlocked');
 
                 currentLevel++;
-                // حفظ المستوى
                 localStorage.setItem('timi_game_level', currentLevel);
 
                 if (currentLevel >= totalLevels) {
-                    setTimeout(() => {
-                        document.getElementById('final-screen').style.display = 'flex';
-                    }, 1000);
+                    setTimeout(showFinalWin, 600);
                 } else {
-                    setTimeout(loadLevel, 600);
+                    setTimeout(loadLevel, 500);
                 }
             } else {
-                feedback.style.color = "red";
+                playSound('error');
+                mainCard.classList.add('shake');
+                setTimeout(() => mainCard.classList.remove('shake'), 450);
+
+                feedback.style.color = "var(--error-color)";
                 feedback.innerText = "إجابة خاطئة، حاولي مرة أخرى يا تيمي! ❌";
             }
         }
 
-        // إعادة اللعبة
+        /* =========================================================
+           6. تأثيرات الفوز والمفرقعات (Confetti Engine)
+           ========================================================= */
+        function showFinalWin() {
+            document.getElementById('progress-bar').style.width = `100%`;
+            document.getElementById('final-screen').style.display = 'flex';
+            playSound('win');
+            startConfetti();
+        }
+
+        function startConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const colors = ['#ff4d6d', '#ff758f', '#ffb3c1', '#ffe5ec', '#ffffff'];
+
+            for (let i = 0; i < 120; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 8 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    vy: Math.random() * 3 + 2,
+                    vx: Math.random() * 2 - 1
+                });
+            }
+
+            function render() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.y += p.vy;
+                    p.x += p.vx;
+                    if (p.y > canvas.height) p.y = -10;
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(render);
+            }
+            render();
+        }
+
         function resetGame() {
-            if (confirm("هل تريدين إعادة اللعبة من المستوى الأول؟")) {
+            if (confirm("هل تريدين إعادة اللعبة وبدء التجميع من المستوى الأول؟")) {
                 localStorage.removeItem('timi_game_level');
                 localStorage.removeItem('timi_pieces_order');
                 location.reload();
