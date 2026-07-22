@@ -16,7 +16,7 @@
             align-items: center;
         }
 
-        h1 { color: #ff4d6d; margin-bottom: 10px; }
+        h1 { color: #ff4d6d; margin-bottom: 5px; }
 
         .container {
             background: white;
@@ -26,7 +26,7 @@
             max-width: 450px;
             width: 100%;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .level-badge {
@@ -56,16 +56,24 @@
             background: #ff4d6d;
             color: white;
             border: none;
-            padding: 12px 30px;
-            font-size: 17px;
+            padding: 12px 25px;
+            font-size: 16px;
             border-radius: 10px;
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3);
+            margin: 3px;
+        }
+
+        .reset-btn {
+            background: #adb5bd;
+            font-size: 13px;
+            padding: 6px 12px;
+            box-shadow: none;
         }
 
         #feedback { margin-top: 10px; font-weight: bold; height: 20px; }
 
-        .puzzle-title { margin-top: 20px; font-weight: bold; color: #ff4d6d; }
+        .puzzle-title { margin-top: 10px; font-weight: bold; color: #ff4d6d; }
         
         #puzzle-box {
             width: 300px;
@@ -76,7 +84,7 @@
             grid-template-columns: repeat(10, 1fr);
             grid-template-rows: repeat(10, 1fr);
             background-color: #ffe5ec;
-            margin: 15px auto;
+            margin: 10px auto;
             position: relative;
             overflow: hidden;
         }
@@ -118,6 +126,8 @@
             <input type="text" id="user-answer" placeholder="اكتبي الإجابة هنا..." autocomplete="off">
             <br>
             <button onclick="checkAnswer()">تأكيد الإجابة ✨</button>
+            <br>
+            <button class="reset-btn" onclick="resetGame()">إعادة اللعبة من الأول 🔄</button>
         </div>
         <div id="feedback"></div>
     </div>
@@ -130,16 +140,16 @@
         <p style="font-size: 18px;">لقد جمعتِ الـ 100 قطعة واكتملت الصورة بنجاح ✨</p>
         <div id="final-image-container" style="width:300px; height:400px; border: 5px solid #ff4d6d; border-radius: 12px; background-size: cover; background-image: url('../input_file_0.png');"></div>
         <br>
-        <button onclick="location.reload()">إعادة اللعب ❤️</button>
+        <button onclick="resetGame()">إعادة اللعب من جديد ❤️</button>
     </div>
 
     <script>
-        // المسار التجريبي والأساسي لضمان تحميل الصورة
         const imageUrl = '../input_file_0.png';
         const totalLevels = 100;
-        let currentLevel = 0;
 
-        // أسئلة أسهل بكثير مع قبول الإجابات المتنوعة
+        // استرجاع التقدم المحفوظ أو البدء من 0
+        let currentLevel = parseInt(localStorage.getItem('timi_game_level')) || 0;
+
         const baseQuestions = [
             { q: "ما هو لون السماء في النهار؟", a: ["ازرق", "أزرق"] },
             { q: "كم عدد أيام الأسبوع؟", a: ["7", "سبعة"] },
@@ -154,12 +164,10 @@
         ];
 
         const allLevels = [];
-        
         for (let i = 0; i < totalLevels; i++) {
             if (i < baseQuestions.length) {
                 allLevels.push(baseQuestions[i]);
             } else {
-                // باقي المستويات أرقام سهلة جداً (1+1 ، 2+1...)
                 allLevels.push({
                     q: `تحدي بسيط: ما هو ناتج ${i + 1} + 1 ؟`,
                     a: [`${i + 2}`]
@@ -167,11 +175,13 @@
             }
         }
 
-        // خلط القطع عشوائياً
-        let piecesOrder = Array.from({length: 100}, (_, i) => i);
-        piecesOrder = piecesOrder.sort(() => Math.random() - 0.5);
+        // إنشاء ترتيب ثوابت للقطع لضمان الحفظ
+        let piecesOrder = JSON.parse(localStorage.getItem('timi_pieces_order'));
+        if (!piecesOrder) {
+            piecesOrder = Array.from({length: 100}, (_, i) => i).sort(() => Math.random() - 0.5);
+            localStorage.setItem('timi_pieces_order', JSON.stringify(piecesOrder));
+        }
 
-        // إنشاء القطع
         const puzzleBox = document.getElementById('puzzle-box');
         for (let i = 0; i < 100; i++) {
             const piece = document.createElement('div');
@@ -184,12 +194,26 @@
             puzzleBox.appendChild(piece);
         }
 
+        // إظهار القطع المفعلة المسبقة عند فتح الرابط
+        function restoreProgress() {
+            for (let i = 0; i < currentLevel; i++) {
+                const pieceToUnlock = piecesOrder[i];
+                if (document.getElementById(`piece-${pieceToUnlock}`)) {
+                    document.getElementById(`piece-${pieceToUnlock}`).classList.add('unlocked');
+                }
+            }
+            if (currentLevel >= totalLevels) {
+                document.getElementById('final-screen').style.display = 'flex';
+            } else {
+                nextLevel();
+            }
+        }
+
         function checkAnswer() {
             const input = document.getElementById('user-answer').value.trim().toLowerCase();
             const feedback = document.getElementById('feedback');
             const validAnswers = allLevels[currentLevel].a;
 
-            // التحقق إذا كانت الإجابة تطابق أي خيار من الخيارات المتاحة
             const isCorrect = validAnswers.some(ans => ans.toLowerCase() === input);
 
             if (isCorrect) {
@@ -200,6 +224,8 @@
                 document.getElementById(`piece-${pieceToUnlock}`).classList.add('unlocked');
                 
                 currentLevel++;
+                // حفظ المستوى في ذاكرة المتصفح
+                localStorage.setItem('timi_game_level', currentLevel);
 
                 if (currentLevel >= totalLevels) {
                     setTimeout(() => {
@@ -221,7 +247,15 @@
             document.getElementById('feedback').innerText = "";
         }
 
-        nextLevel();
+        function resetGame() {
+            if (confirm("هل تريدين إعادة اللعبة من المستوى الأول؟")) {
+                localStorage.removeItem('timi_game_level');
+                localStorage.removeItem('timi_pieces_order');
+                location.reload();
+            }
+        }
+
+        restoreProgress();
     </script>
 </body>
 </html>
