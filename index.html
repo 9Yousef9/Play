@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>رحلة تيمي الخاصة 💖</title>
     <style>
-        /* =========================================================
-           1. التنسيقات الأساسية والمتغيرات العامة
-           ========================================================= */
         :root {
             --primary-color: #ff4d6d;
             --primary-hover: #ff758f;
@@ -43,9 +40,6 @@
             position: relative;
         }
 
-        /* =========================================================
-           2. عناوين الصفحة والكرت الرئيسي
-           ========================================================= */
         h1.main-title {
             color: var(--primary-color);
             font-size: 28px;
@@ -72,7 +66,6 @@
             z-index: 10;
         }
 
-        /* أنيميشن الاهتزاز عند الخطأ */
         .shake {
             animation: shakeAnim 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
         }
@@ -84,9 +77,6 @@
             40%, 60% { transform: translate3d(6px, 0, 0); }
         }
 
-        /* =========================================================
-           3. أشرطة التقدم والمستويات
-           ========================================================= */
         .level-badge {
             background: linear-gradient(45deg, var(--primary-hover), var(--primary-color));
             color: white;
@@ -97,7 +87,6 @@
             margin-bottom: 15px;
             display: inline-block;
             box-shadow: 0 4px 12px rgba(255, 77, 109, 0.3);
-            letter-spacing: 0.5px;
         }
 
         .progress-container {
@@ -108,7 +97,6 @@
             margin-bottom: 20px;
             overflow: hidden;
             border: 1px solid var(--border-color);
-            position: relative;
         }
 
         .progress-bar {
@@ -131,9 +119,6 @@
             justify-content: center;
         }
 
-        /* =========================================================
-           4. خيارات الإجابة والأزرار
-           ========================================================= */
         .options-container {
             display: flex;
             flex-direction: column;
@@ -154,8 +139,6 @@
             width: 100%;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
             outline: none;
-            position: relative;
-            overflow: hidden;
         }
 
         .option-btn:hover {
@@ -163,10 +146,6 @@
             border-color: var(--primary-hover);
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(255, 77, 109, 0.2);
-        }
-
-        .option-btn:active {
-            transform: translateY(0);
         }
 
         .reset-btn {
@@ -178,13 +157,6 @@
             border-radius: 8px;
             cursor: pointer;
             margin-top: 15px;
-            transition: all 0.2s ease;
-        }
-
-        .reset-btn:hover {
-            color: var(--primary-color);
-            border-color: var(--primary-color);
-            background: #fff0f3;
         }
 
         #feedback {
@@ -192,20 +164,13 @@
             font-weight: bold;
             font-size: 15px;
             min-height: 24px;
-            transition: all 0.3s ease;
         }
 
-        /* =========================================================
-           5. صندوق البزل والشبكة
-           ========================================================= */
         .puzzle-title {
             margin-top: 5px;
             font-weight: bold;
             color: var(--primary-color);
             font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         #puzzle-box {
@@ -238,9 +203,6 @@
             border: none;
         }
 
-        /* =========================================================
-           6. شاشة الفوز والمفرقعات المتحركة
-           ========================================================= */
         #final-screen {
             display: none;
             position: fixed;
@@ -252,7 +214,6 @@
             align-items: center;
             text-align: center;
             padding: 20px;
-            animation: fadeIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         #final-image-container {
@@ -268,17 +229,9 @@
 
         canvas#confetti-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
             z-index: 1000;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
@@ -310,21 +263,16 @@
     <div id="final-screen">
         <h1 style="font-size: 32px; color: var(--primary-color);">🎉 مبروك يا تيمي! 🎉</h1>
         <p style="font-size: 18px; color: var(--secondary-color); margin-top: 5px;">لقد جمعتِ الـ 100 قطعة واكتملت الصورة بنجاح ✨</p>
-        <div id="final-image-container" style="background-image: url('65171.png');"></div>
+        <div id="final-image-container" style="background-image: url('input_file_0.png');"></div>
         <button class="option-btn" style="background: linear-gradient(45deg, var(--primary-hover), var(--primary-color)); color:white; width:220px; margin-top: 10px;" onclick="resetGame()">إعادة اللعب ❤️</button>
     </div>
 
     <script>
-        /* =========================================================
-           1. الإعدادات الأساسية
-           ========================================================= */
-        const imageUrl = '65171.png';
+        // تغيير اسم الملف لـ input_file_0.png بناءً على المرفوع في حسابك على جيت هب
+        const imageUrl = 'input_file_0.png';
         const totalLevels = 100;
         let currentLevel = parseInt(localStorage.getItem('timi_game_level')) || 0;
 
-        /* =========================================================
-           2. محرك الصوت المطور (Web Audio API)
-           ========================================================= */
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
         function playSound(type) {
@@ -335,39 +283,22 @@
             gain.connect(audioCtx.destination);
 
             if (type === 'success') {
-                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
-                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
-                osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2); // G5
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
                 gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
                 osc.start();
-                osc.stop(audioCtx.currentTime + 0.4);
+                osc.stop(audioCtx.currentTime + 0.3);
             } else if (type === 'error') {
-                osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
-                osc.frequency.setValueAtTime(164.81, audioCtx.currentTime + 0.15); // E3
+                osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(164.81, audioCtx.currentTime + 0.15);
                 gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
                 osc.start();
-                osc.stop(audioCtx.currentTime + 0.35);
-            } else if (type === 'win') {
-                const notes = [523.25, 659.25, 783.99, 1046.50];
-                notes.forEach((freq, idx) => {
-                    const oscW = audioCtx.createOscillator();
-                    const gainW = audioCtx.createGain();
-                    oscW.connect(gainW);
-                    gainW.connect(audioCtx.destination);
-                    oscW.frequency.setValueAtTime(freq, audioCtx.currentTime + (idx * 0.12));
-                    gainW.gain.setValueAtTime(0.15, audioCtx.currentTime + (idx * 0.12));
-                    gainW.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + (idx * 0.12) + 0.4);
-                    oscW.start(audioCtx.currentTime + (idx * 0.12));
-                    oscW.stop(audioCtx.currentTime + (idx * 0.12) + 0.4);
-                });
+                osc.stop(audioCtx.currentTime + 0.3);
             }
         }
 
-        /* =========================================================
-           3. قائمة 100 لغز فريد ومتنوع
-           ========================================================= */
         const baseRiddles = [
             { q: "ما هو الشيء الذي يزيد إذا تشاركته ويكبر بالحب؟", options: ["الحب", "المال", "الطعام"], correct: "الحب" },
             { q: "ما هو الشيء الذي يتكلم جميع اللغات لكنه بلا لسان؟", options: ["الصدى", "الهاتف", "الكتاب"], correct: "الصدى" },
@@ -378,17 +309,7 @@
             { q: "ما هو الكوكب الملقب باسم الكوكب الأحمر؟", options: ["المريخ", "الأرض", "المشتري"], correct: "المريخ" },
             { q: "ما هو أسرع حيوان بري في العالم؟", options: ["الفهد", "الأسد", "الغزال"], correct: "الفهد" },
             { q: "ما هو الشيء الذي يطير بلا أجنحة ويبكي بلا عيون؟", options: ["السحاب", "الطائرة", "العصفور"], correct: "السحاب" },
-            { q: "من هو أكثر شخص يحب تيمي في العالم؟", options: ["يوسف ❤️", "لا أحد", "شخص آخر"], correct: "يوسف ❤️" },
-            { q: "ما هو الشيء الذي يكتب ولا يقرأ؟", options: ["القلم", "الكتاب", "الباب"], correct: "القلم" },
-            { q: "ما هو البيت الذي ليس فيه أبواب ولا نوافذ؟", options: ["بيت الشعر", "المنزل", "القصر"], correct: "بيت الشعر" },
-            { q: "ما هو الشيء الذي ينبض بلا قلب؟", options: ["الساعة", "العصفور", "القلم"], correct: "الساعة" },
-            { q: "ما هو البحر الذي لا يوجد فيه ماء؟", options: ["بحر الخريطة", "البحر الأحمر", "البحر الميت"], correct: "بحر الخريطة" },
-            { q: "ما هو الشيء الذي يسير معك أينما ذهبت في الشمس؟", options: ["ظلك", "حذاؤك", "حقيبتك"], correct: "ظلك" },
-            { q: "ما هو الشيء الذي يدور حول البيت دون أن يتحرك؟", options: ["الجدار", "السيارة", "الشجرة"], correct: "الجدار" },
-            { q: "ما هو الشيء الذي يسقط على الرأس ولا يؤلم؟", options: ["المطر", "الحجر", "تفاحة"], correct: "المطر" },
-            { q: "ما هو الشيء الذي يخترق الزجاج ولا يكسره؟", options: ["الضوء", "الهواء", "الماء"], correct: "الضوء" },
-            { q: "ما هو الشيء الذي يملك أسناناً كثيرة ولكنه لا يعض؟", options: ["المشط", "المنشار", "الكلب"], correct: "المشط" },
-            { q: "ما هي العاصمة المصرية المشهورة؟", options: ["القاهرة", "الإسكندرية", "أسوان"], correct: "القاهرة" }
+            { q: "من هو أكثر شخص يحب تيمي في العالم؟", options: ["يوسف ❤️", "لا أحد", "شخص آخر"], correct: "يوسف ❤️" }
         ];
 
         const allLevels = [];
@@ -401,9 +322,6 @@
             });
         }
 
-        /* =========================================================
-           4. بناء وتخزين الترتيب العشوائي للقطع
-           ========================================================= */
         let piecesOrder = JSON.parse(localStorage.getItem('timi_pieces_order'));
         if (!piecesOrder) {
             piecesOrder = Array.from({length: totalLevels}, (_, i) => i).sort(() => Math.random() - 0.5);
@@ -422,9 +340,6 @@
             puzzleBox.appendChild(piece);
         }
 
-        /* =========================================================
-           5. استرجاع التقدم والتحكم بالتفاعل
-           ========================================================= */
         function restoreProgress() {
             for (let i = 0; i < currentLevel; i++) {
                 const pieceToUnlock = piecesOrder[i];
@@ -432,7 +347,7 @@
                 if (pieceElem) pieceElem.classList.add('unlocked');
             }
             if (currentLevel >= totalLevels) {
-                showFinalWin();
+                document.getElementById('final-screen').style.display = 'flex';
             } else {
                 loadLevel();
             }
@@ -475,7 +390,9 @@
                 localStorage.setItem('timi_game_level', currentLevel);
 
                 if (currentLevel >= totalLevels) {
-                    setTimeout(showFinalWin, 600);
+                    setTimeout(() => {
+                        document.getElementById('final-screen').style.display = 'flex';
+                    }, 600);
                 } else {
                     setTimeout(loadLevel, 500);
                 }
@@ -487,52 +404,6 @@
                 feedback.style.color = "var(--error-color)";
                 feedback.innerText = "إجابة خاطئة، حاولي مرة أخرى يا تيمي! ❌";
             }
-        }
-
-        /* =========================================================
-           6. تأثيرات الفوز والمفرقعات (Confetti Engine)
-           ========================================================= */
-        function showFinalWin() {
-            document.getElementById('progress-bar').style.width = `100%`;
-            document.getElementById('final-screen').style.display = 'flex';
-            playSound('win');
-            startConfetti();
-        }
-
-        function startConfetti() {
-            const canvas = document.getElementById('confetti-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            const particles = [];
-            const colors = ['#ff4d6d', '#ff758f', '#ffb3c1', '#ffe5ec', '#ffffff'];
-
-            for (let i = 0; i < 120; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height - canvas.height,
-                    size: Math.random() * 8 + 4,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    vy: Math.random() * 3 + 2,
-                    vx: Math.random() * 2 - 1
-                });
-            }
-
-            function render() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => {
-                    p.y += p.vy;
-                    p.x += p.vx;
-                    if (p.y > canvas.height) p.y = -10;
-                    ctx.fillStyle = p.color;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fill();
-                });
-                requestAnimationFrame(render);
-            }
-            render();
         }
 
         function resetGame() {
