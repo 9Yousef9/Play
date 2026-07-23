@@ -226,18 +226,9 @@
             box-shadow: 0 12px 35px rgba(255, 77, 109, 0.4);
             margin: 15px 0;
         }
-
-        canvas#confetti-canvas {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 1000;
-        }
     </style>
 </head>
 <body>
-
-    <canvas id="confetti-canvas"></canvas>
 
     <h1 class="main-title">🌸 رحلة تيمي 🌸</h1>
 
@@ -263,12 +254,13 @@
     <div id="final-screen">
         <h1 style="font-size: 32px; color: var(--primary-color);">🎉 مبروك يا تيمي! 🎉</h1>
         <p style="font-size: 18px; color: var(--secondary-color); margin-top: 5px;">لقد جمعتِ الـ 100 قطعة واكتملت الصورة بنجاح ✨</p>
-        <div id="final-image-container" style="background-image: url('input_file_0.png');"></div>
+        <div id="final-image-container" style="background-image: url('يلعب/input_file_0.png');"></div>
         <button class="option-btn" style="background: linear-gradient(45deg, var(--primary-hover), var(--primary-color)); color:white; width:220px; margin-top: 10px;" onclick="resetGame()">إعادة اللعب ❤️</button>
     </div>
 
     <script>
-        const imageUrl = 'input_file_0.png';
+        // المسار الصحيح المباشر للصورة داخل المجلد "يلعب"
+        const imageUrl = 'يلعب/input_file_0.png';
         const totalLevels = 100;
         let currentLevel = parseInt(localStorage.getItem('timi_game_level')) || 0;
 
@@ -298,7 +290,6 @@
             }
         }
 
-        // قائمة الـ 100 لغز الفريدة بدون أي تكرار
         const allLevels = [
             { q: "ما هو الشيء الذي يزيد إذا تشاركته ويكبر بالحب؟", options: ["الحب", "المال", "الطعام"], correct: "الحب" },
             { q: "ما هو الشيء الذي يتكلم جميع اللغات لكنه بلا لسان؟", options: ["الصدى", "الهاتف", "الكتاب"], correct: "الصدى" },
@@ -355,7 +346,7 @@
             { q: "ما هي الوسيلة التي نستخدمها للاتصال والرسائل؟", options: ["الهاتف", "التلفاز", "المذياع"], correct: "الهاتف" },
             { q: "كم شهراً في السنة الحالية؟", options: ["12 شهراً", "10 أشهر", "14 شهراً"], correct: "12 شهراً" },
             { q: "ما هو اللون الناتج عن مزج الأحمر والأصفر؟", options: ["البرتقالي", "الأخضر", "البنفسجي"], correct: "البرتقالي" },
-            { q: "ما هو الطائر الناطق الذي يقلد الأصوات؟", options: ["الببغاء", "النسر", "الحمامة"], correct: "الب ببغاء" },
+            { q: "ما هو الطائر الناطق الذي يقلد الأصوات؟", options: ["الببغاء", "النسر", "الحمامة"], correct: "الببغاء" },
             { q: "ما هو الشيء الذي تسمعه ولا تراه وإذا رأيته لا تسمعه؟", options: ["الطلقة", "الصوت", "البرق"], correct: "الطلقة" },
             { q: "ما هو الشيء الذي ينبض بالقلب والدم ليعيش؟", options: ["الإنسان", "الحجر", "الخشب"], correct: "الإنسان" },
             { q: "ما هو الجهاز المستخدم لالتقاط الصور؟", options: ["الكاميرا", "الساعة", "المكواة"], correct: "الكاميرا" },
